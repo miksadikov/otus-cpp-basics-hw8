@@ -7,6 +7,7 @@
 #include <iostream>
 #include <iterator>
 #include <map>
+#include <sstream>
 #include <thread>
 #include <vector>
 
@@ -55,17 +56,13 @@ void push_words_counts(Word_counts& counts, Counter& counter, const size_t k) {
       std::begin(vec), std::begin(vec) + k, std::end(vec),
       [](auto lhs, auto& rhs) { return lhs.second > rhs.second; });
 
-  int i = 0;
-  for (auto& v : vec) {
-    Word_count c;
-    c.word = v.first;
-    c.count = v.second;
-    counts.push_back(c);
-    i++;
-    if (i == k) {
-      break;
-    }
-  }
+  std::for_each(std::begin(vec), std::begin(vec) + k,
+                [&counts](std::pair<std::string, std::size_t>& v) {
+                  Word_count c;
+                  c.word = v.first;
+                  c.count = v.second;
+                  counts.push_back(c);
+                });
 }
 
 bool comp_by_counts(const Word_count& a, const Word_count& b) {

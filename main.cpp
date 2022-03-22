@@ -92,29 +92,23 @@ void topk_thread(std::vector<std::string>& lines, int start_pos, int n_lines,
 
 int main(int argc, char* argv[]) {
   if (argc < 4) {
-    std::cerr << "Usage: topk_words number_of_threads(1..10), "
-                 "topk_words(3..10), [FILES...]\n";
+    std::cerr << "Usage: topk_words topk_words(3..10), [FILES...]\n";
     return EXIT_FAILURE;
   }
 
-  int n_threads = std::atoi(argv[1]);
-  if ((n_threads < 1) || (n_threads > 10)) {
-    std::cerr
-        << "n_threads parameter value must be in the range from 1 to 10\n";
-    return EXIT_FAILURE;
-  }
-  size_t TOPK = std::atoi(argv[2]);
+  size_t TOPK = std::atoi(argv[1]);
   if ((TOPK < 3) || (TOPK > 10)) {
     std::cerr
         << "topk_words parameter value must be in the range from 3 to 10\n";
     return EXIT_FAILURE;
   }
+  const int n_threads = 1;
   auto start = std::chrono::high_resolution_clock::now();
   Word_counts counts;
   Counters counters_vec;
   counters_vec.resize(n_threads);
 
-  for (int i = 3; i < argc; ++i) {
+  for (int i = 2; i < argc; ++i) {
     std::ifstream input{argv[i]};
     if (!input.is_open()) {
       std::cerr << "Failed to open file " << argv[i] << '\n';
